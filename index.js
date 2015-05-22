@@ -1,7 +1,7 @@
 /**
  * Preprocess and compile JavaScript file.
  *
- * @param {Object} config configuration.
+ * @param {Object|String} config configuration JSON object or configuration file path.
  * @param {String} config.entry entry file path.
  * @param {String} config.intermediate intermediate file path.
  * @param {String} config.output output file path.
@@ -46,6 +46,9 @@ exports.compile = function(config){
 
 	// process config.
 	if (config){
+		if (typeof config === 'string'){
+			config = exports.readConfigFile(config);
+		}
 		'verbose' in config && (verbose = config.verbose);
 		'entry' in config && (entryFile = config.entry);
 		'intermediate' in config && (intermediateFile = config.intermediate);
@@ -109,5 +112,26 @@ exports.compile = function(config){
 	q.write(distributionFile);
 	q.log('Done!');
 	q.run();
+
+};
+
+exports.readConfigFile = function(path){
+
+	var content = fs.readFileSync(path);
+	if (content){
+		var data = JSON.parse(content);
+		if (data && 'inherits' in data && typeof data.inherits === 'string'){
+			var inherits = exports.readConfigFile(data.inherits),
+			    key;
+			for (key in data){
+				if (data.hasOwnProperty(key)){
+					inherits[key] = data[key];
+				}
+			}
+			return inherits;
+		}
+		return data;
+	}
+	return null;
 
 };
