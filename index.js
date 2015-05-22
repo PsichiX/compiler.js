@@ -117,7 +117,8 @@ exports.compile = function(config){
 
 exports.readConfigFile = function(path){
 
-	var content = fs.readFileSync(path);
+	var fs      = require('fs'),
+	    content = fs.readFileSync(path);
 	if (content){
 		var data = JSON.parse(content);
 		if (data && data.inherits && typeof data.inherits === 'string'){
