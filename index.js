@@ -49,12 +49,12 @@ exports.compile = function(config){
 		if (typeof config === 'string'){
 			config = exports.readConfigFile(config);
 		}
-		'verbose' in config && (verbose = config.verbose);
-		'entry' in config && (entryFile = config.entry);
-		'intermediate' in config && (intermediateFile = config.intermediate);
-		'output' in config && (distributionFile = config.output);
-		'basedir' in config && (baseDir = config.basedir);
-		if ('defines' in config){
+		config.verbose && (verbose = config.verbose);
+		config.entry && (entryFile = config.entry);
+		config.intermediate && (intermediateFile = config.intermediate);
+		config.output && (distributionFile = config.output);
+		config.basedir && (baseDir = config.basedir);
+		if (config.defines){
 			var defs = config.defines,
 			    key;
 			for (key in defs){
@@ -63,8 +63,8 @@ exports.compile = function(config){
 				}
 			}
 		}
-		'lint' in config && (lint = config.lint);
-		'minify' in config && (minify = config.minify);
+		config.lint && (lint = config.lint);
+		config.minify && (minify = config.minify);
 	}
 
 	// configuration validation.
@@ -120,7 +120,7 @@ exports.readConfigFile = function(path){
 	var content = fs.readFileSync(path);
 	if (content){
 		var data = JSON.parse(content);
-		if (data && 'inherits' in data && typeof data.inherits === 'string'){
+		if (data && data.inherits && typeof data.inherits === 'string'){
 			var inherits = exports.readConfigFile(data.inherits),
 			    key;
 			for (key in data){
