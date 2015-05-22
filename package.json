@@ -1,5 +1,5 @@
 {
-  "name": "compiler",
+  "name": "compiler.js",
   "version": "1.0.0",
   "description": "Tool to preprocess and compile JavaScript file.",
   "main": "index.js",
