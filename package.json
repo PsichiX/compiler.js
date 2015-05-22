@@ -1,6 +1,6 @@
 {
   "name": "compiler.js",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Tool to preprocess and compile JavaScript file.",
   "main": "index.js",
   "dependencies": {
