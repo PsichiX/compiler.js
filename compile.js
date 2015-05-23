@@ -13,10 +13,10 @@ for (i = 2, c = argv.length; i < c; ++i){
 	} else {
 		off = arg.indexOf(':');
 		if (off < 0){
-			cmd = arg;
+			cmd   = arg;
 			param = null;
 		} else {
-			cmd = arg.substring(0, off);
+			cmd   = arg.substring(0, off);
 			param = arg.substring(off + 1);
 		}
 		if (cmd === '--verbose' || cmd === '-v'){

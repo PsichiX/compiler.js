@@ -2,6 +2,7 @@
  * Preprocess and compile JavaScript file.
  *
  * @param {Object|String} config configuration JSON object or configuration file path.
+ * @param {Boolean} config.verbose determines if program should print not only errors.
  * @param {String} config.entry entry file path.
  * @param {String} config.intermediate intermediate file path.
  * @param {String} config.output output file path.
@@ -12,7 +13,7 @@
  */
 exports.compile = function(config){
 
-	var version          = '1.0.0',
+	var version          = '1.0.7',
 	    fs               = require('fs'),
 	    gear             = require('gear'),
 	    preprocessor     = require('preprocessor'),
@@ -31,7 +32,7 @@ exports.compile = function(config){
 	    // register tasks.
 	    registry         = new gear.Registry({
 		    module: 'gear-lib',
-		    tasks: tasks
+		    tasks:  tasks
 	    }),
 	    // configuration data.
 	    verbose          = false,
@@ -93,7 +94,7 @@ exports.compile = function(config){
 
 	// execute tasks.
 	var q = new gear.Queue({registry: registry});
-	q.log('JS compiler v' + version);
+	q.log('Compiler.js v' + version);
 	verbose && q.log('>>> Configuration:');
 	verbose && q.log('entry: ' + entryFile);
 	verbose && q.log('intermediate: ' + intermediateFile);
