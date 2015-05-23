@@ -9,7 +9,7 @@ var i, c, arg, off, cmd, param;
 for (i = 2, c = argv.length; i < c; ++i){
 	arg = argv[i];
 	if (arg.substring(0, 2) !== '--' && arg.substring(0, 1) !== '-'){
-		config = compiler.readConfigFile(arg.substring(-5) === '.json' ? arg : arg + '.json');
+		config = compiler.readConfigFile(arg);
 	} else {
 		off = arg.indexOf(':');
 		if (off < 0){

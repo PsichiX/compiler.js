@@ -4,7 +4,7 @@
 
 compiler.js is great and easy to use tool to produce preprocessed and minified JS files.
 
-[![NPM](https://nodei.co/npm/compiler.js.png)](https://nodei.co/npm/compiler.js/)
+[![NPM](https://nodei.co/npm/compiler.js.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/compiler.js/)
 
 ## Installation
 
@@ -21,7 +21,7 @@ $ npm install -g compiler.js
 ## API Usage Examples
 
 ```javascript
-var compiler = require('../index.js'), // load compiler.js module.
+var compiler = require('compiler.js'), // load compiler.js module.
     config   = {
 	    verbose:      true,                     // we want to see all logs.
 	    entry:        'src/main.js',            // path to entry JavaScript file.
@@ -37,16 +37,18 @@ var compiler = require('../index.js'), // load compiler.js module.
 
 compiler.compile(config);
 ```
+or from configuration file:
+```javascript
+var compiler = require('compiler.js');
+
+compiler.compile('compilation.js');
+```
 
 ## Commandline Usage Examples
 
 Using configuration file:
 ```bash
 $ compile path/to/configuration.json
-```
-or without extension:
-```bash
-$ compile path/to/configuration
 ```
 
 Using parameters:
@@ -69,6 +71,23 @@ Commandline options:
  * `--define:NAME=value` or `-d:NAME=value` - variable definition available at compile time.
  * `--lint:boolean` or `-l:boolean`         - determines if lint will be used.
  * `--minify:boolean` or `-m:boolean`       - determines if minify will be used.
+
+## Configuration File Example
+
+```json
+{
+  "verbose": true,
+  "entry": "src/main.js",
+  "intermediate": "intermediate/app.js",
+  "output": "bin/app.js",
+  "basedir": "src/",
+  "defines": {
+    "DEBUG": true
+  },
+  "lint": true,
+  "minify": true
+}
+```
 
 ## Support
  * [Issues](https://github.com/PsichiX/compiler.js/issues)
