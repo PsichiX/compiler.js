@@ -47,6 +47,9 @@ exports.compile = function(config){
 	// process config.
 	if (config){
 		if (typeof config === 'string'){
+			if (config.substring(-5) !== '.json'){
+				config += '.json';
+			}
 			config = exports.readConfigFile(config);
 		}
 		config.verbose && (verbose = config.verbose);
@@ -122,6 +125,9 @@ exports.readConfigFile = function(path){
 	if (content){
 		var data = JSON.parse(content);
 		if (data && data.inherits && typeof data.inherits === 'string'){
+			if (data.inherits.substring(-5) !== '.json'){
+				data.inherits += '.json';
+			}
 			var inherits = exports.readConfigFile(data.inherits),
 			    key;
 			for (key in data){

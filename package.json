@@ -1,6 +1,6 @@
 {
   "name": "compiler.js",
-  "version": "1.0.2",
+  "version": "1.0.6",
   "description": "Tool to preprocess and compile JavaScript file.",
   "main": "index.js",
   "dependencies": {
@@ -19,10 +19,40 @@
     "build",
     "compile"
   ],
-  "author": "Patryk 'PsichiX' Budzynski <psichix@gmail.com> (http://psichix.com)",
+  "author": {
+    "name": "Patryk 'PsichiX' Budzynski",
+    "email": "psichix@gmail.com",
+    "url": "http://psichix.com"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/PsichiX/compiler.js/issues"
   },
-  "homepage": "https://github.com/PsichiX/compiler.js#readme"
+  "homepage": "https://github.com/PsichiX/compiler.js#readme",
+  "preferGlobal": "true",
+  "bin": {
+    "compile": "compile.js"
+  },
+  "gitHead": "93cce2f75b164f328b99b6f327fe346af8f96d3f",
+  "_id": "compiler.js@1.0.6",
+  "_shasum": "0d09874358ac08673067d74c96ece4537c4b30d3",
+  "_from": "compiler.js@*",
+  "_npmVersion": "2.9.1",
+  "_nodeVersion": "0.12.3",
+  "_npmUser": {
+    "name": "psichix",
+    "email": "psichix@gmail.com"
+  },
+  "dist": {
+    "shasum": "0d09874358ac08673067d74c96ece4537c4b30d3",
+    "tarball": "http://registry.npmjs.org/compiler.js/-/compiler.js-1.0.6.tgz"
+  },
+  "maintainers": [
+    {
+      "name": "psichix",
+      "email": "psichix@gmail.com"
+    }
+  ],
+  "directories": {},
+  "_resolved": "https://registry.npmjs.org/compiler.js/-/compiler.js-1.0.6.tgz"
 }
