@@ -26,7 +26,7 @@ for (i = 2, c = argv.length; i < c; ++i){
 		} else if (cmd === '--intermediate' || cmd === '-i'){
 			config.intermediate = param;
 		} else if (cmd === '--output' || cmd === '-o'){
-			config.outout = param;
+			config.output = param;
 		} else if (cmd === '--basedir' || cmd === '-b'){
 			config.basedir = param;
 		} else if (cmd === '--define' || cmd === '-d'){

@@ -13,7 +13,7 @@
  */
 exports.compile = function(config){
 
-	var version          = '1.0.10',
+	var version          = '1.0.11',
 	    fs               = require('fs'),
 	    gear             = require('gear'),
 	    preprocessor     = require('preprocessor'),
