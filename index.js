@@ -13,7 +13,7 @@
  */
 exports.compile = function(config){
 
-	var version          = '1.0.9',
+	var version          = '1.0.10',
 	    fs               = require('fs'),
 	    gear             = require('gear'),
 	    preprocessor     = require('preprocessor'),
@@ -32,7 +32,7 @@ exports.compile = function(config){
 	    // register tasks.
 	    registry         = new gear.Registry({
 		    module: 'gear-lib',
-		    tasks:  tasks
+		    tasks: tasks
 	    }),
 	    // configuration data.
 	    verbose          = false,
