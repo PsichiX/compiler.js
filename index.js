@@ -10,10 +10,11 @@
  * @param {Object} config.defines map of definitions: {NAME: value}.
  * @param {Object} config.lint determines if lint will be used.
  * @param {Object} config.minify determines if minify will be used.
+ * @param {Number} sync determines if compilation will be performed synchronous.
  */
-exports.compile = function(config){
+exports.compile = function(config, sync){
 
-	var version          = '1.0.11',
+	var version          = '1.1.0',
 	    fs               = require('fs'),
 	    gear             = require('gear'),
 	    preprocessor     = require('preprocessor'),
@@ -44,6 +45,9 @@ exports.compile = function(config){
 	    lint             = false,
 	    minify           = false;
 
+	if (typeof sync !== 'number'){
+		sync = -1;
+	}
 
 	// process config.
 	if (config){
@@ -75,11 +79,6 @@ exports.compile = function(config){
 	if (!fs.existsSync(entryFile)){
 		throw 'Entry file does not exists: ' + entryFile;
 	}
-	if (!intermediateFile){
-		intermediateFile = entryFile.substring(-3) === '.js'
-			? entryFile.substring(0, -3) + 'intermediate.js'
-			: entryFile + '.intermediate';
-	}
 	if (!distributionFile){
 		distributionFile = entryFile.substring(-3) === '.js'
 			? entryFile.substring(0, -3) + 'distribution.js'
@@ -91,28 +90,40 @@ exports.compile = function(config){
 
 	// execute tasks.
 	var q = new gear.Queue({registry: registry});
-	q.log('Compiler.js v' + version);
+	verbose && q.log('Compiler.js v' + version);
 	verbose && q.log('>>> Configuration:');
 	verbose && q.log('entry: ' + entryFile);
-	verbose && q.log('intermediate: ' + intermediateFile);
+	verbose && intermediateFile && q.log('intermediate: ' + intermediateFile);
 	verbose && q.log('output: ' + distributionFile);
 	verbose && q.log('basedir: ' + baseDir);
 	verbose && q.log('lint: ' + lint);
 	verbose && q.log('minify: ' + minify);
 	verbose && q.log('defines: ' + JSON.stringify(defines, null, '  '));
-	verbose && q.log('>>> Preprocess entry file into intermediate file');
+	verbose && sync > 0 && q.log('sync timeout: ' + sync);
 	q.read(entryFile);
 	q.preprocess({
 		basedir: baseDir,
 		defines: defines
 	});
-	q.write(intermediateFile);
-	verbose && q.log('>>> Compile intermediate file into distribution file');
+	intermediateFile && q.write(intermediateFile);
 	lint && q.jslint();
 	minify && q.jsminify();
 	q.write(distributionFile);
-	q.log('Done!');
-	q.run();
+	if (sync > 0){
+		var complete  = false,
+		    timeStart = Date.now();
+		verbose && q.log('>>> Performing synchronous compilation...');
+		q.run(function(){
+			complete = true;
+		});
+		while (!complete && (sync > 0 ? Date.now() - timeStart < sync : true)){
+		}
+		verbose && q.log('>>> Done!');
+	}
+	else {
+		verbose && q.log('>>> Performed asynchronous compilation!');
+		q.run();
+	}
 
 };
 
