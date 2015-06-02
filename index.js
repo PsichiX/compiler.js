@@ -10,11 +10,11 @@
  * @param {Object} config.defines map of definitions: {NAME: value}.
  * @param {Object} config.lint determines if lint will be used.
  * @param {Object} config.minify determines if minify will be used.
- * @param {Number} sync determines if compilation will be performed synchronously.
+ * @param {Function|null} callback function called when compilation is complete.
  */
-exports.compile = function(config, sync){
+exports.compile = function(config, callback){
 
-	var version          = '1.1.2',
+	var version          = '1.1.3',
 	    fs               = require('fs'),
 	    gear             = require('gear'),
 	    preprocessor     = require('preprocessor'),
@@ -49,9 +49,8 @@ exports.compile = function(config, sync){
 	    lint             = false,
 	    minify           = false;
 
-	if (typeof sync !== 'number'){
-		sync = -1;
-	}
+	callback = callback || function(){
+		};
 
 	// process config.
 	if (config){
@@ -103,7 +102,6 @@ exports.compile = function(config, sync){
 	verbose && q.log('lint: ' + lint);
 	verbose && q.log('minify: ' + minify);
 	verbose && q.log('defines: ' + JSON.stringify(defines, null, '  '));
-	verbose && sync >= 0 && q.log('sync timeout: ' + sync);
 	q.read(entryFile);
 	q.preprocess({
 		basedir: baseDir,
@@ -113,17 +111,11 @@ exports.compile = function(config, sync){
 	lint && q.jslint();
 	minify && q.jsminify();
 	q.writeSync(distributionFile);
-	if (sync >= 0){
-		var complete  = false,
-		    timeStart = Date.now();
-		verbose && q.log('>>> Performing synchronous compilation...');
-		q.run();
-		verbose && q.log('>>> Done!');
-	}
-	else {
-		verbose && q.log('>>> Performed asynchronous compilation!');
-		q.run();
-	}
+	verbose && q.log('>>> Performing compilation...');
+	q.run(function(){
+		verbose && console.log('>>> Done!');
+		callback();
+	});
 
 };
 

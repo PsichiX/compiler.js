@@ -2,8 +2,7 @@
 
 var argv     = process.argv,
     compiler = require('compiler.js'),
-    config   = {defines: {}},
-    sync     = -1;
+    config   = {defines: {}};
 
 // process arguments.
 var i, c, arg, off, cmd, param;
@@ -41,10 +40,8 @@ for (i = 2, c = argv.length; i < c; ++i){
 			config.lint = JSON.parse(param);
 		} else if (cmd === '--minify' || cmd === '-m'){
 			config.minify = JSON.parse(param);
-		} else if (cmd === '--sync' || cmd === '-s'){
-			sync = parseInt(param);
 		}
 	}
 }
 
-compiler.compile(config, sync);
+compiler.compile(config);
