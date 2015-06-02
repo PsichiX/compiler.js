@@ -14,7 +14,7 @@
  */
 exports.compile = function(config, sync){
 
-	var version          = '1.1.1',
+	var version          = '1.1.2',
 	    fs               = require('fs'),
 	    gear             = require('gear'),
 	    preprocessor     = require('preprocessor'),
@@ -28,6 +28,10 @@ exports.compile = function(config, sync){
 				    options && options.defines ? options.defines : {}
 			    );
 			    done(null, new gear.Blob(result));
+		    },
+		    writeSync: function(options, blob, done){
+			    fs.writeFileSync(options, blob.result);
+			    done(null, blob);
 		    }
 	    },
 	    // register tasks.
@@ -105,19 +109,15 @@ exports.compile = function(config, sync){
 		basedir: baseDir,
 		defines: defines
 	});
-	intermediateFile && q.write(intermediateFile);
+	intermediateFile && q.writeSync(intermediateFile);
 	lint && q.jslint();
 	minify && q.jsminify();
-	q.write(distributionFile);
+	q.writeSync(distributionFile);
 	if (sync >= 0){
 		var complete  = false,
 		    timeStart = Date.now();
 		verbose && q.log('>>> Performing synchronous compilation...');
-		q.run(function(){
-			complete = true;
-		});
-		while (!complete && (sync > 0 ? Date.now() - timeStart < sync : true)){
-		}
+		q.run();
 		verbose && q.log('>>> Done!');
 	}
 	else {
