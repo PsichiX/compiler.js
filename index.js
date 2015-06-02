@@ -10,11 +10,11 @@
  * @param {Object} config.defines map of definitions: {NAME: value}.
  * @param {Object} config.lint determines if lint will be used.
  * @param {Object} config.minify determines if minify will be used.
- * @param {Number} sync determines if compilation will be performed synchronous.
+ * @param {Number} sync determines if compilation will be performed synchronously.
  */
 exports.compile = function(config, sync){
 
-	var version          = '1.1.0',
+	var version          = '1.1.1',
 	    fs               = require('fs'),
 	    gear             = require('gear'),
 	    preprocessor     = require('preprocessor'),
@@ -99,7 +99,7 @@ exports.compile = function(config, sync){
 	verbose && q.log('lint: ' + lint);
 	verbose && q.log('minify: ' + minify);
 	verbose && q.log('defines: ' + JSON.stringify(defines, null, '  '));
-	verbose && sync > 0 && q.log('sync timeout: ' + sync);
+	verbose && sync >= 0 && q.log('sync timeout: ' + sync);
 	q.read(entryFile);
 	q.preprocess({
 		basedir: baseDir,
@@ -109,7 +109,7 @@ exports.compile = function(config, sync){
 	lint && q.jslint();
 	minify && q.jsminify();
 	q.write(distributionFile);
-	if (sync > 0){
+	if (sync >= 0){
 		var complete  = false,
 		    timeStart = Date.now();
 		verbose && q.log('>>> Performing synchronous compilation...');
