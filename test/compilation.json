@@ -7,6 +7,5 @@
   "defines": {
     "DEBUG": true
   },
-  "lint": true,
   "minify": true
 }

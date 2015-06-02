@@ -25,13 +25,12 @@ var compiler = require('compiler.js'), // load compiler.js module.
     config   = {
 	    verbose:      true,                     // we want to see all logs.
 	    entry:        'src/main.js',            // path to entry JavaScript file.
-	    intermediate: 'intermediate/app.js',    // path to intermediate (preprocessed) JavaScript file.
+	    intermediate: 'intermediate/app.js',    // [optional] path to intermediate (preprocessed) JavaScript file.
 	    output:       'bin/app.js',             // path ti final (binary/minified) JavaScript file.
 	    basedir:      'src/',                   // base dir path for files that will be included.
 	    defines:      {
 		    'DEBUG': true                       // variable available at preprocessing time.
 	    },
-	    lint:         true,                     // we want to check code syntax.
 	    minify:       false                     // we do not want to minify final file.
     };
 
@@ -69,7 +68,6 @@ Commandline options:
  * `--output:path` or `-o:path`             - output file path.
  * `--basedir:path` or `-b:path`            - base directory path (for included files).
  * `--define:NAME=value` or `-d:NAME=value` - variable definition available at compile time.
- * `--lint:boolean` or `-l:boolean`         - determines if lint will be used.
  * `--minify:boolean` or `-m:boolean`       - determines if minify will be used.
 
 ## Configuration File Example
@@ -84,7 +82,6 @@ Commandline options:
   "defines": {
     "DEBUG": true
   },
-  "lint": true,
   "minify": true
 }
 ```

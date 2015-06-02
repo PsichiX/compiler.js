@@ -14,31 +14,10 @@
  */
 exports.compile = function(config, callback){
 
-	var version          = '1.1.3',
-	    fs               = require('fs'),
-	    gear             = require('gear'),
+	var version          = '1.2.0',
+	    fs               = require('fs-extra'),
 	    preprocessor     = require('preprocessor'),
-	    // gear module custom tasks.
-	    tasks            = {
-		    preprocess: function(options, blob, done){
-			    var result = new preprocessor(
-				    blob.result,
-				    options && options.basedir ? options.basedir : '.'
-			    ).process(
-				    options && options.defines ? options.defines : {}
-			    );
-			    done(null, new gear.Blob(result));
-		    },
-		    writeSync: function(options, blob, done){
-			    fs.writeFileSync(options, blob.result);
-			    done(null, blob);
-		    }
-	    },
-	    // register tasks.
-	    registry         = new gear.Registry({
-		    module: 'gear-lib',
-		    tasks: tasks
-	    }),
+	    uglify           = require('uglify-js'),
 	    // configuration data.
 	    verbose          = false,
 	    entryFile        = 'entry.js',
@@ -46,7 +25,6 @@ exports.compile = function(config, callback){
 	    distributionFile = null,
 	    baseDir          = './',
 	    defines          = {},
-	    lint             = false,
 	    minify           = false;
 
 	callback = callback || function(){
@@ -71,7 +49,6 @@ exports.compile = function(config, callback){
 				}
 			}
 		}
-		config.lint && (lint = config.lint);
 		config.minify && (minify = config.minify);
 	}
 
@@ -92,30 +69,31 @@ exports.compile = function(config, callback){
 	}
 
 	// execute tasks.
-	var q = new gear.Queue({registry: registry});
-	verbose && q.log('Compiler.js v' + version);
-	verbose && q.log('>>> Configuration:');
-	verbose && q.log('entry: ' + entryFile);
-	verbose && intermediateFile && q.log('intermediate: ' + intermediateFile);
-	verbose && q.log('output: ' + distributionFile);
-	verbose && q.log('basedir: ' + baseDir);
-	verbose && q.log('lint: ' + lint);
-	verbose && q.log('minify: ' + minify);
-	verbose && q.log('defines: ' + JSON.stringify(defines, null, '  '));
-	q.read(entryFile);
-	q.preprocess({
-		basedir: baseDir,
-		defines: defines
-	});
-	intermediateFile && q.writeSync(intermediateFile);
-	lint && q.jslint();
-	minify && q.jsminify();
-	q.writeSync(distributionFile);
-	verbose && q.log('>>> Performing compilation...');
-	q.run(function(){
-		verbose && console.log('>>> Done!');
-		callback();
-	});
+	verbose && console.log('Compiler.js v' + version);
+	verbose && console.log('>>> Configuration:');
+	verbose && console.log('entry: ' + entryFile);
+	verbose && intermediateFile && console.log('intermediate: ' + intermediateFile);
+	verbose && console.log('output: ' + distributionFile);
+	verbose && console.log('basedir: ' + baseDir);
+	verbose && console.log('minify: ' + minify);
+	verbose && console.log('defines: ' + JSON.stringify(defines, null, '  '));
+	verbose && console.log('>>> Performing compilation...');
+	var data = fs.readFileSync(entryFile);
+	data = new preprocessor(
+		data,
+		baseDir ? baseDir : '.'
+	).process(
+		defines ? defines : {}
+	);
+	if (intermediateFile){
+		fs.ensureFileSync(intermediateFile);
+		fs.writeFileSync(intermediateFile, data);
+	}
+	minify && (data = uglify.minify(data, {fromString: true}).code);
+	fs.ensureFileSync(distributionFile);
+	fs.writeFileSync(distributionFile, data);
+	verbose && console.log('>>> Done!');
+	callback();
 
 };
 

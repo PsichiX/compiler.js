@@ -36,8 +36,6 @@ for (i = 2, c = argv.length; i < c; ++i){
 			} else {
 				config.defines[param.substring(0, o)] = JSON.parse(param.substring(o + 1));
 			}
-		} else if (cmd === '--lint' || cmd === '-l'){
-			config.lint = JSON.parse(param);
 		} else if (cmd === '--minify' || cmd === '-m'){
 			config.minify = JSON.parse(param);
 		}
